@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://lijialu-com.arrrrrco.chatgpt.site'),
+  metadataBase: new URL('https://www.lijialu.com'),
   title: {
     default: '已有最难忘',
     template: '%s · 已有最难忘',
