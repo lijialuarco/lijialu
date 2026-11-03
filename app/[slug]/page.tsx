@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { PhoneGuide } from '@/components/phone-guide';
 import { getMeteor, METEORS } from '@/lib/meteors';
 import { getSubsite, SUBSITES } from '@/lib/subsites';
@@ -25,7 +24,7 @@ export default async function SubsitePage({
       <main className="subsite-shell">
         <p className="subsite-index">UNKNOWN ORBIT</p>
         <h1>这里还没有星球。</h1>
-        <Link href="/">返回宇宙</Link>
+        <a href="/" target="_top">返回宇宙</a>
       </main>
     );
   }
@@ -47,7 +46,7 @@ export default async function SubsitePage({
       <h1>{subsite.name}</h1>
       <p className="subsite-description">{subsite.description}</p>
       <p className="subsite-status">子站内容将在下一阶段接入。</p>
-      <Link href="/">← 返回宇宙</Link>
+      <a href="/" target="_top">← 返回宇宙</a>
     </main>
   );
 }

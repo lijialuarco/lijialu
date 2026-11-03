@@ -1,5 +1,3 @@
-import Link from 'next/link';
-
 type Phone = { name: string; role: string; price: string; image?: string; source: string; specs: [string, string][]; verdict: string; caution: string };
 
 const fatherPhones: Phone[] = [
@@ -28,7 +26,7 @@ function ComparisonTable({ phones }: { phones: Phone[] }) {
 }
 
 export function PhoneGuide() {
-  return <main className="guide-shell"><div className="guide-aurora" aria-hidden="true" /><header className="guide-header"><Link href="/" aria-label="返回宇宙">⌁</Link><span>METEOR M01 · FAMILY PHONE GUIDE</span></header><article className="guide-article">
+  return <main className="guide-shell"><div className="guide-aurora" aria-hidden="true" /><header className="guide-header"><a href="/" target="_top" aria-label="返回宇宙">⌁</a><span>METEOR M01 · FAMILY PHONE GUIDE</span></header><article className="guide-article">
     <p className="guide-eyebrow">一封给家人的选机备忘 · 2026</p><h1>择星</h1><p className="guide-lede">不是堆一台“最高参数”，而是给不同使用习惯选一台愿意每天拿在手里的手机。价格会随官方活动变动，以下按官方规格与建议零售价整理。</p>
     <section className="guide-verdict"><p>先给结论</p><div><strong>岳父：荣耀 Magic8 Pro 12+256GB</strong><span>阅读、护眼、续航和省心功能的均衡首选；目标价可看 5,500–6,000 元区间。</span></div><div><strong>岳母：vivo X500 Pro 12+256GB</strong><span>优先轻巧、人像、旅行记录；若“远摄”是第一需求，再升级 Find X9 Ultra。</span></div></section>
     <section><div className="guide-section-heading"><span>01</span><h2>先按使用场景决定</h2></div><div className="guide-decisions"><div><b>每天长时间阅读</b><span>Magic8 Pro：护眼与大屏体验优先。</span></div><div><b>华为设备很多</b><span>Mate 80 Pro / Pura 80 Pro：减少迁移成本。</span></div><div><b>拍人、拍家人、随身带</b><span>X500 Pro：更轻、更不挑场景。</span></div><div><b>常拍演出、远景、旅行风光</b><span>Find X9 Ultra：用重量换长焦上限。</span></div></div></section>
