@@ -48,7 +48,7 @@ function FinalPick() {
 
 export function PhoneGuide() {
   return <main className="guide-shell"><div className="guide-aurora" aria-hidden="true" /><header className="guide-header"><a href="/" target="_top" aria-label="返回宇宙">⌁</a><span>METEOR M01 · FAMILY PHONE GUIDE</span></header><article className="guide-article">
-    <p className="guide-eyebrow">一封给家人的选机备忘 · 2026</p><h1>择星</h1><p className="guide-lede">不是堆一台“最高参数”，而是给不同使用习惯选一台愿意每天拿在手里的手机。价格会随官方活动变动，以下按官方规格与建议零售价整理。</p>
+    <p className="guide-eyebrow">一封给家人的选机备忘 · 2026</p><h1><span className="guide-title-calligraphy">择星</span></h1><p className="guide-lede">不是堆一台“最高参数”，而是给不同使用习惯选一台愿意每天拿在手里的手机。价格会随官方活动变动，以下按官方规格与建议零售价整理。</p>
     <section className="guide-verdict"><p>独立推荐声明</p><div><strong>不代入任何既有设备、年龄、品牌或拍照偏好</strong><span>以下结论只以总价 11,000–12,000 元、两台综合性价比最大化为目标。</span></div></section>
     <FinalPick />
     <section><div className="guide-section-heading"><span>01</span><h2>先选系列，再比单机</h2></div><p>同一个品牌的不同系列，解决的是不同问题。先看下面四张“系列地图”，排除不适合的方向，再进入参数表会更快。</p><SeriesMap /></section>
