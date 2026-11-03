@@ -818,6 +818,25 @@ button {
 .series-card dd { margin: 6px 0 0; color: rgba(244, 238, 228, 0.64); font-size: 12px; line-height: 1.75; }
 .series-card a { color: rgba(255, 218, 159, 0.86); font-size: 10px; letter-spacing: 0.08em; text-underline-offset: 4px; }
 
+.final-pick { margin-top: 68px; }
+.final-pick-intro { max-width: 760px; color: rgba(244, 238, 228, 0.63); font-size: 15px; line-height: 2; letter-spacing: 0.035em; }
+.final-total { display: flex; align-items: baseline; gap: 14px; margin: 25px 0 18px; padding: 18px 20px; border: 1px solid rgba(255, 215, 150, 0.2); background: linear-gradient(100deg, rgba(217, 149, 70, 0.13), rgba(255, 248, 235, 0.025)); }
+.final-total span { color: rgba(255, 225, 165, 0.72); font-size: 11px; letter-spacing: 0.14em; }
+.final-total strong { color: #ffe0a7; font-size: clamp(28px, 4vw, 45px); font-weight: 500; letter-spacing: 0.04em; }
+.final-total small { color: rgba(244, 238, 228, 0.42); font-size: 10px; line-height: 1.6; }
+.final-pick-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.final-pick-grid > article { padding: 24px; border: 1px solid rgba(255, 225, 165, 0.14); background: rgba(255, 248, 235, 0.035); }
+.final-pick-grid > article > p:first-child { margin: 0; color: rgba(255, 209, 142, 0.72); font-size: 11px; letter-spacing: 0.1em; }
+.final-pick-grid h3 { margin: 8px 0 17px; color: rgba(255, 245, 227, 0.95); font-size: 27px; font-weight: 500; letter-spacing: 0.04em; }
+.final-reason { color: rgba(244, 238, 228, 0.72); font-size: 13px; line-height: 1.9; }
+.final-pick-grid ul { margin: 18px 0; padding: 15px 0 15px 19px; border-top: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(244, 238, 228, 0.65); font-size: 12px; line-height: 1.8; }
+.final-pick-grid li + li { margin-top: 8px; }
+.final-pick-grid a { color: rgba(255, 218, 159, 0.86); font-size: 10px; letter-spacing: 0.08em; text-underline-offset: 4px; }
+.final-elimination { margin-top: 18px; padding: 19px 20px; border-left: 2px solid rgba(255, 209, 142, 0.55); background: rgba(255, 248, 235, 0.025); }
+.final-elimination b, .final-elimination span { display: block; }
+.final-elimination b { color: rgba(255, 225, 165, 0.9); font-size: 13px; font-weight: 500; }
+.final-elimination span { margin-top: 7px; color: rgba(244, 238, 228, 0.53); font-size: 12px; line-height: 1.8; }
+
 .guide-compare { margin-bottom: 32px; }
 .guide-compare table { min-width: 820px; }
 .guide-compare th:not(:first-child) { min-width: 160px; color: rgba(255, 232, 189, 0.88); font-size: 11px; letter-spacing: 0.06em; }
@@ -1026,7 +1045,8 @@ button {
   .guide-article { width: min(100% - 40px, 900px); margin-top: 38px; }
   .guide-article section { margin-top: 52px; }
   .guide-article section > p, .guide-ranking { font-size: 14px; line-height: 1.9; }
-  .guide-decisions, .phone-grid, .series-map { grid-template-columns: 1fr; }
+  .guide-decisions, .phone-grid, .series-map, .final-pick-grid { grid-template-columns: 1fr; }
+  .final-total { align-items: flex-start; flex-direction: column; gap: 5px; }
   .phone-photo { min-height: 210px; }
   .phone-photo img { height: 240px; }
 }
