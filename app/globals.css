@@ -805,6 +805,7 @@ button {
 .guide-decisions b, .guide-decisions span { display: block; }
 .guide-decisions b { color: rgba(255, 235, 204, 0.92); font-size: 14px; font-weight: 500; letter-spacing: 0.06em; }
 .guide-decisions span { margin-top: 9px; color: rgba(244, 238, 228, 0.54); font-size: 12px; line-height: 1.7; }
+.guide-decisions a { display: inline-block; margin-top: 8px; color: rgba(255, 218, 159, 0.86); font-size: 10px; letter-spacing: 0.08em; text-underline-offset: 4px; }
 
 .guide-compare { margin-bottom: 32px; }
 .guide-compare table { min-width: 820px; }
