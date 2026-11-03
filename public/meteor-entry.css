@@ -1,0 +1,40 @@
+.meteor-entry {
+  position: fixed;
+  z-index: 12;
+  right: clamp(22px, 4.7vw, 76px);
+  bottom: clamp(72px, 9.7vh, 98px);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255, 224, 164, 0.78);
+  font: 10px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.18em;
+  text-decoration: none;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.meteor-entry::before {
+  width: 28px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(225, 151, 67, 0.35), #ffe1a5);
+  box-shadow: 0 0 14px rgba(225, 151, 67, 0.46);
+  content: '';
+  transform: rotate(-24deg);
+  animation: meteor-glimmer 3.8s ease-in-out infinite;
+}
+
+.meteor-entry:hover,
+.meteor-entry:focus-visible {
+  color: #fff0d2;
+  transform: translateX(-3px);
+}
+
+@keyframes meteor-glimmer {
+  0%, 58%, 100% { opacity: 0.35; transform: translateX(0) rotate(-24deg); }
+  66% { opacity: 1; transform: translateX(7px) rotate(-24deg); }
+}
+
+@media (max-width: 640px) {
+  .meteor-entry { right: 18px; bottom: 74px; font-size: 8px; }
+}
