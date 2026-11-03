@@ -15,7 +15,10 @@ import {
   useState,
 } from 'react';
 import * as THREE from 'three';
+import { METEORS, Meteor } from '@/lib/meteors';
 import { SUBSITES, Subsite } from '@/lib/subsites';
+
+type Destination = Subsite | Meteor;
 
 type OrbitSpec = {
   radius: number;
@@ -395,8 +398,8 @@ type PlanetProps = {
   active: boolean;
   paused: boolean;
   reducedMotion: boolean;
-  onHover: (subsite: Subsite | null) => void;
-  onSelect: (subsite: Subsite) => void;
+  onHover: (subsite: Destination | null) => void;
+  onSelect: (subsite: Destination) => void;
 };
 
 function OrbitingPlanet({
@@ -499,14 +502,73 @@ function OrbitingPlanet({
   );
 }
 
+function OrbitingMeteor({
+  meteor,
+  active,
+  paused,
+  reducedMotion,
+  onHover,
+  onSelect,
+}: {
+  meteor: Meteor;
+  active: boolean;
+  paused: boolean;
+  reducedMotion: boolean;
+  onHover: (target: Destination | null) => void;
+  onSelect: (target: Destination) => void;
+}) {
+  const meteorRef = useRef<THREE.Group>(null);
+  const visualRef = useRef<THREE.Group>(null);
+  const progress = useRef(0.12);
+
+  useFrame((_, delta) => {
+    if (!meteorRef.current || !visualRef.current) return;
+    if (!paused && !reducedMotion) progress.current = (progress.current + delta * 0.035) % 1;
+
+    const x = THREE.MathUtils.lerp(6.8, -7.2, progress.current);
+    const y = THREE.MathUtils.lerp(3.4, -2.7, progress.current);
+    const z = THREE.MathUtils.lerp(-1.8, 1.1, progress.current);
+    meteorRef.current.position.set(x, y, z);
+
+    const scale = THREE.MathUtils.damp(visualRef.current.scale.x, active ? 1.35 : 1, 7, delta);
+    visualRef.current.scale.setScalar(scale);
+  });
+
+  return (
+    <group ref={meteorRef}>
+      <group
+        ref={visualRef}
+        rotation={[0.12, -0.24, -1.14]}
+        onPointerOver={(event) => { event.stopPropagation(); onHover(meteor); }}
+        onPointerOut={(event) => { event.stopPropagation(); onHover(null); }}
+        onClick={(event) => { event.stopPropagation(); onSelect(meteor); }}
+      >
+        <mesh scale={[1, 2.2, 2]} visible={false}>
+          <sphereGeometry args={[0.32, 16, 16]} />
+          <meshBasicMaterial transparent opacity={0} />
+        </mesh>
+        <mesh position={[-0.34, 0, 0]} rotation={[0, 0, -Math.PI / 2]}>
+          <coneGeometry args={[0.055, 1.18, 12]} />
+          <meshBasicMaterial color={meteor.color} transparent opacity={0.32} blending={THREE.AdditiveBlending} />
+        </mesh>
+        <mesh>
+          <sphereGeometry args={[0.115, 24, 24]} />
+          <meshStandardMaterial color={meteor.accent} emissive={meteor.color} emissiveIntensity={2.4} roughness={0.24} />
+        </mesh>
+        <pointLight color={meteor.accent} intensity={active ? 2.3 : 1.15} distance={3.5} />
+      </group>
+    </group>
+  );
+}
+
 type UniverseProps = {
   activeSlug: string | null;
   travelling: boolean;
   manualPause: boolean;
   reducedMotion: boolean;
   compact: boolean;
-  onHover: (subsite: Subsite | null) => void;
-  onSelect: (subsite: Subsite) => void;
+  onHover: (subsite: Destination | null) => void;
+  onSelect: (subsite: Destination) => void;
 };
 
 function Universe({
@@ -558,6 +620,18 @@ function Universe({
         );
       })}
 
+      {METEORS.map((meteor) => (
+        <OrbitingMeteor
+          key={meteor.slug}
+          meteor={meteor}
+          active={activeSlug === meteor.slug}
+          paused={manualPause || activeSlug === meteor.slug || travelling}
+          reducedMotion={reducedMotion}
+          onHover={onHover}
+          onSelect={onSelect}
+        />
+      ))}
+
       {SUBSITES.map((subsite) => {
         const spec = ORBITS[subsite.slug];
         const active = activeSlug === subsite.slug;
@@ -587,14 +661,14 @@ export function PlanetaryHome() {
   const compact = useMediaQuery('(max-width: 640px)');
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
   const [manualPause, setManualPause] = useState(false);
-  const [travellingTo, setTravellingTo] = useState<Subsite | null>(null);
+  const [travellingTo, setTravellingTo] = useState<Destination | null>(null);
   const clearTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const activeSubsite =
-    SUBSITES.find((item) => item.slug === activeSlug) ?? null;
+  const activeDestination =
+    [...SUBSITES, ...METEORS].find((item) => item.slug === activeSlug) ?? null;
 
   useEffect(() => {
-    SUBSITES.forEach((subsite) => router.prefetch(`/${subsite.slug}`));
+    [...SUBSITES, ...METEORS].forEach((destination) => router.prefetch(`/${destination.slug}`));
   }, [router]);
 
   useEffect(
@@ -605,7 +679,7 @@ export function PlanetaryHome() {
   );
 
   const handleHover = useCallback(
-    (subsite: Subsite | null) => {
+    (subsite: Destination | null) => {
       if (clearTimer.current) clearTimeout(clearTimer.current);
       if (subsite) {
         setActiveSlug(subsite.slug);
@@ -617,7 +691,7 @@ export function PlanetaryHome() {
   );
 
   const beginJourney = useCallback(
-    (subsite: Subsite) => {
+    (subsite: Destination) => {
       if (travellingTo) return;
 
       if (coarsePointer && activeSlug !== subsite.slug) {
@@ -726,18 +800,20 @@ export function PlanetaryHome() {
         onPointerEnter={cancelClear}
         onPointerLeave={() => handleHover(null)}
       >
-        {activeSubsite ? (
+        {activeDestination ? (
           <>
             <div className="planet-card-topline">
               <span>
-                SIZE {String(activeSubsite.sizeLevel).padStart(2, '0')} / 09
+                {'sizeLevel' in activeDestination
+                  ? `SIZE ${String(activeDestination.sizeLevel).padStart(2, '0')} / 09`
+                  : `METEOR ${activeDestination.index}`}
               </span>
-              <span>{activeSubsite.englishName}</span>
+              <span>{activeDestination.englishName}</span>
             </div>
-            <h2>{activeSubsite.name}</h2>
-            <p>{activeSubsite.description}</p>
-            <button type="button" onClick={() => beginJourney(activeSubsite)}>
-              {coarsePointer ? activeSubsite.prompt : '点击行星，开始穿越'}
+            <h2>{activeDestination.name}</h2>
+            <p>{activeDestination.description}</p>
+            <button type="button" onClick={() => beginJourney(activeDestination)}>
+              {coarsePointer ? activeDestination.prompt : '点击光点，开始穿越'}
               <span aria-hidden="true">↗</span>
             </button>
           </>
@@ -762,6 +838,22 @@ export function PlanetaryHome() {
               >
                 <span>L{subsite.sizeLevel}</span>
                 {subsite.name}
+              </button>
+            </li>
+          ))}
+          {METEORS.map((meteor) => (
+            <li key={meteor.slug}>
+              <button
+                type="button"
+                className={activeSlug === meteor.slug ? 'is-active is-meteor' : 'is-meteor'}
+                onPointerEnter={() => handleHover(meteor)}
+                onPointerLeave={() => handleHover(null)}
+                onFocus={() => handleHover(meteor)}
+                onBlur={() => handleHover(null)}
+                onClick={() => beginJourney(meteor)}
+              >
+                <span>✦</span>
+                {meteor.name}
               </button>
             </li>
           ))}

@@ -1,8 +1,10 @@
 import Link from 'next/link';
+import { PhoneGuide } from '@/components/phone-guide';
+import { getMeteor, METEORS } from '@/lib/meteors';
 import { getSubsite, SUBSITES } from '@/lib/subsites';
 
 export function generateStaticParams() {
-  return SUBSITES.map((subsite) => ({ slug: subsite.slug }));
+  return [...SUBSITES, ...METEORS].map((item) => ({ slug: item.slug }));
 }
 
 export default async function SubsitePage({
@@ -12,6 +14,11 @@ export default async function SubsitePage({
 }) {
   const { slug } = await params;
   const subsite = getSubsite(slug);
+  const meteor = getMeteor(slug);
+
+  if (meteor?.slug === 'phone-guide') {
+    return <PhoneGuide />;
+  }
 
   if (!subsite) {
     return (
